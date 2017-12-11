@@ -1,0 +1,9 @@
+{
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
+    "/js/vendor/jquery.js": "/js/vendor/jquery.js",
+    "/js/vendor/popper.js": "/js/vendor/popper.js",
+    "/js/vendor/bootstrap.js": "/js/vendor/bootstrap.js",
+    "/js/vendor/select2.js": "/js/vendor/select2.js",
+    "/js/vendor/chartjs.js": "/js/vendor/chartjs.js"
+}
