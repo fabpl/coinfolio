@@ -17,6 +17,7 @@ class CreateCurrenciesTable extends Migration
             $table->increments('id');
             $table->string('code')->unique();
             $table->string('name');
+            $table->string('symbol')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -49,9 +49,8 @@ class Coindesk
         return $price->toArray();
     }
 
-
     /**
-     *
+     * @return bool
      */
     public function updatePrices()
     {
@@ -62,7 +61,11 @@ class Coindesk
                 $price->eur = $_price['EUR'];
                 $price->save();
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**

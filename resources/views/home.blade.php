@@ -10,7 +10,7 @@
                             <option selected value="">Add market:</option>
                             @foreach($markets as $market)
                                 <option value="{{$market->id}}">
-                                    [{{$market->exchenge->name}}]
+                                    [{{$market->exchange->name}}]
                                     {{$market->currency_from->name}} ({{$market->currency_from->code}})
                                     - {{$market->currency_to->name}} ({{$market->currency_to->code}})
                                 </option>
@@ -30,7 +30,7 @@
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Exchenge</th>
+                <th>Exchange</th>
                 <th>Market</th>
                 <th>Last</th>
                 <th>24h Change</th>
@@ -40,18 +40,23 @@
             <tbody>
             @forelse($followings as $market)
                 <tr>
-                    <td>{{$market->exchenge->name}}</td>
+                    <td>{{$market->exchange->name}}</td>
                     <td>
                         <a href="{{route('markets.show', ['market' => $market->id])}}">
-                            [{{$market->currency_from->code}}-{{$market->currency_to->code}}] {{$market->currency_from->name}}-{{$market->currency_to->name}}
+                            [{{$market->currency_from->code}}-{{$market->currency_to->code}}
+                            ] {{$market->currency_from->name}}-{{$market->currency_to->name}}
                         </a>
                     </td>
                     <td>
-                        <span data-bitcoin="Ƀ {{number_format($market->last, 8, ',', ' ')}}"
-                              data-usd="$ {{number_format($market->last * $price->usd, 8, ',', ' ')}}"
-                              data-eur="€ {{number_format($market->last * $price->eur, 8, ',', ' ')}}">
+                        @if($market->isFromBitcoin($market->currency_from->code))
+                            <span data-bitcoin="Ƀ {{number_format($market->last, 8, ',', ' ')}}"
+                                  data-usd="$ {{number_format($market->last * $price->usd, 8, ',', ' ')}}"
+                                  data-eur="€ {{number_format($market->last * $price->eur, 8, ',', ' ')}}">
                             Ƀ {{number_format($market->last, 8, ',', ' ')}}
                         </span>
+                        @else
+                            {{$market->currency_from->symbol}} {{number_format($market->last, 8, ',', ' ')}}
+                        @endif
                     </td>
                     <td>
                         <span class="@if($market->change>0) text-success @else text-danger @endif">
@@ -73,9 +78,9 @@
                     </td>
                 </tr>
             @empty
-                 <tr>
-                     <td colspan="5">No markets</td>
-                 </tr>
+                <tr>
+                    <td colspan="5">No markets</td>
+                </tr>
             @endforelse
             </tbody>
         </table>

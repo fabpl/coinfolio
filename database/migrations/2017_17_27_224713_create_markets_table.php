@@ -15,7 +15,7 @@ class CreateMarketsTable extends Migration
     {
         Schema::create('markets', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('exchenge_id');
+            $table->integer('exchange_id');
             $table->integer('currency_id_from');
             $table->integer('currency_id_to');
             $table->string('high');
@@ -29,7 +29,7 @@ class CreateMarketsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('exchenge_id')->references('id')->on('exchenges');
+            $table->foreign('exchange_id')->references('id')->on('exchanges');
             $table->foreign('currency_id_from')->references('id')->on('currencies');
             $table->foreign('currency_id_to')->references('id')->on('currencies');
         });

@@ -24,19 +24,19 @@ class Market extends Model
      * @var array
      */
     protected $fillable = [
-        'exchenge_id', 'currency_id_from', 'currency_id_to', 'high', 'low', 'bid', 'ask', 'volume', 'last',
+        'exchange_id', 'currency_id_from', 'currency_id_to', 'high', 'low', 'bid', 'ask', 'volume', 'last',
     ];
 
     /**
-     * Get the exchenge that owns the market.
+     * Get the exchange that owns the market.
      */
-    public function exchenge()
+    public function exchange()
     {
-        return $this->belongsTo('App\Models\Exchenge');
+        return $this->belongsTo('App\Models\Exchange');
     }
 
     /**
-     * Get the exchenge that owns the market.
+     * Get the exchange that owns the market.
      */
     public function currency_from()
     {
@@ -44,7 +44,7 @@ class Market extends Model
     }
 
     /**
-     * Get the exchenge that owns the market.
+     * Get the exchange that owns the market.
      */
     public function currency_to()
     {
@@ -57,9 +57,9 @@ class Market extends Model
     public function synchronize()
     {
         if ($this->updated_at->diffInMinutes(Carbon::now()) >= 60) {
-            $exchenge = $this->exchenge()->first();
+            $exchange = $this->exchange()->first();
 
-            $class = 'App\Models\Exchenge\\' . ucfirst($exchenge->name);
+            $class = 'App\Models\Exchange\\' . ucfirst($exchange->name);
             if (class_exists($class)) {
                 $updater = new $class();
                 $this->fill($updater->updateMarket($this));
@@ -67,5 +67,14 @@ class Market extends Model
         }
 
        return $this;
+    }
+
+    /**
+     * @param string $code
+     * @return bool
+     */
+    public function isFromBitcoin($code)
+    {
+        return in_array($code, array('BTC', 'XBT'));
     }
 }

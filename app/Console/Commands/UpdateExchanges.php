@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class UpdateExchenges extends Command
+class UpdateExchanges extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'exchenge:update {exchenge}';
+    protected $signature = 'exchange:update {exchange}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update exchenges currencies and markets';
+    protected $description = 'Update exchanges currencies and markets';
 
     /**
      * Create a new command instance.
@@ -37,13 +37,19 @@ class UpdateExchenges extends Command
      */
     public function handle()
     {
-        $exchengeName = $this->argument('exchenge');
+        $exchangeName = $this->argument('exchange');
 
-        $class = 'App\Models\Exchenge\\'.ucfirst($exchengeName);
+        $class = 'App\Models\Exchange\\'.ucfirst($exchangeName);
         if (class_exists($class)) {
             $updater = new $class();
-            $updater->updateCurrencies();
-            $updater->updateMarkets();
+
+            if (!$updater->updateCurrencies()) {
+                echo $updater->getApiError();
+            }
+
+            if (!$updater->updateMarkets()) {
+                echo $updater->getApiError();
+            }
         }
     }
 }

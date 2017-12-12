@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Exchenge\Bittrex;
+use App\Models\Exchange\Bittrex;
 use App\Models\Order;
 use App\Models\Price;
 use App\Models\Price\Coindesk;
@@ -45,14 +45,14 @@ class MarketsController extends Controller
         $histories = array('all' => array(), 'latest' => array());
 
         $histories['all'] = Market::withTrashed()
-            ->where('exchenge_id', $market->exchenge_id)
+            ->where('exchange_id', $market->exchange_id)
             ->where('currency_id_from', $market->currency_id_from)
             ->where('currency_id_to', $market->currency_id_to)
             ->orderBy('created_at', 'asc')
             ->get();
 
         $histories['latest'] = Market::onlyTrashed()
-            ->where('exchenge_id', $market->exchenge_id)
+            ->where('exchange_id', $market->exchange_id)
             ->where('currency_id_from', $market->currency_id_from)
             ->where('currency_id_to', $market->currency_id_to)
             ->orderBy('created_at', 'desc')

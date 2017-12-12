@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Exchenge;
+namespace App\Models\Exchange;
 
 use App\Models\Currency;
-use App\Models\Exchenge;
+use App\Models\Exchange;
 use App\Models\Market;
 use Illuminate\Support\Carbon;
 
@@ -68,13 +68,31 @@ class Bittrex
                     $currency = new Currency();
                     $currency->code = $_currency['Currency'];
                     $currency->name = $_currency['CurrencyLong'];
+                    switch ($_currency['Currency']) {
+                        case 'BTC':
+                        case 'XBT':
+                            $currency->symbol = 'Ƀ';
+                            break;
+
+                        case 'EUR':
+                            $currency->symbol = '€';
+                            break;
+
+                        case 'USD':
+                            $currency->symbol = '$';
+                            break;
+                    }
                     $currency->save();
                 } elseif ($currency->code == $currency->name) {
                     $currency->name = $_currency['CurrencyLong'];
                     $currency->save();
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -83,27 +101,25 @@ class Bittrex
     public function updateMarkets()
     {
         if ($summaries = $this->getMarketSummaries()) {
-            if (!($exchenge = Exchenge::where('name', 'Bittrex')->first())) {
-                $exchenge = new Exchenge();
-                $exchenge->name = 'Bittrex';
-                $exchenge->save();
+            if (!($exchange = Exchange::where('name', 'Bittrex')->first())) {
+                $exchange = new Exchange();
+                $exchange->name = 'Bittrex';
+                $exchange->save();
             }
 
             foreach ($summaries as $summary) {
-                if (!($market = Market::where('exchenge_id', $exchenge->id)->where('code', $summary['MarketName'])->first())) {
+                if (!($market = Market::where('exchange_id', $exchange->id)->where('code', $summary['MarketName'])->first())) {
                     list($currencyCodeFrom, $currencyCodeTo) = explode('-', $summary['MarketName']);
 
                     if (!($currencyFrom = Currency::where('code', $currencyCodeFrom)->first())) {
-                        var_dump($currencyCodeFrom);
                         continue;
                     }
                     if (!($currencyTo = Currency::where('code', $currencyCodeTo)->first())) {
-                        var_dump($currencyCodeTo);
                         continue;
                     }
 
                     $market = new Market();
-                    $market->exchenge_id = $exchenge->id;
+                    $market->exchange_id = $exchange->id;
                     $market->currency_id_from = $currencyFrom->id;
                     $market->currency_id_to = $currencyTo->id;
                 } else {
@@ -123,7 +139,11 @@ class Bittrex
                 $market->change = $summary['PrevDay'] > 0 ? (($summary['Last'] - $summary['PrevDay']) / $summary['PrevDay'] * 100) : 0;
                 $market->save();
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**

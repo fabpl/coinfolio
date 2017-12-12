@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Exchenge\Bittrex;
+use App\Models\Exchange\Bittrex;
 use App\Models\Price;
 use App\Models\Price\Coindesk;
 use App\Models\Market;
@@ -33,13 +33,13 @@ class HomeController extends Controller
         $price = Price::first()->synchronize();
 
         // Followings
-        $followings = $user->markets()->with(['exchenge', 'currency_from', 'currency_to'])->get();
+        $followings = $user->markets()->with(['exchange', 'currency_from', 'currency_to'])->get();
         foreach ($followings as $k => $market) {
             $followings[$k] = $market->synchronize();
         }
 
         // Markets
-        $markets = Market::with(['exchenge', 'currency_from', 'currency_to'])->get();
+        $markets = Market::with(['exchange', 'currency_from', 'currency_to'])->get();
 
         return view('home', compact('markets', 'followings', 'price'));
     }

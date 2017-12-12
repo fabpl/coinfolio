@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mb-4">
         <h2>[{{$market->currency_from->code}}-{{$market->currency_to->code}}] {{$market->currency_from->name}}
-            -{{$market->currency_to->name}}</h2>
+            - {{$market->currency_to->name}}</h2>
         <hr>
     </div>
 
@@ -15,11 +15,15 @@
                     <div class="card-body">
                         <h4 class="card-title">High</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->high, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->high * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->high * $price->eur, 8, ',', ' ')}}">
-                                Ƀ {{number_format($market->high, 8, ',', ' ')}}
-                            </span>
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->high, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->high * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->high * $price->eur, 8, ',', ' ')}}">
+                                    Ƀ {{number_format($market->high, 8, ',', ' ')}}
+                                </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->high, 8, ',', ' ')}}
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -29,11 +33,15 @@
                     <div class="card-body">
                         <h4 class="card-title">Bid</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->bid, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->bid * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->bid * $price->eur, 8, ',', ' ')}}">
-                                Ƀ {{number_format($market->bid, 8, ',', ' ')}}
-                            </span>
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->bid, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->bid * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->bid * $price->eur, 8, ',', ' ')}}">
+                                    Ƀ {{number_format($market->bid, 8, ',', ' ')}}
+                                </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->bid, 8, ',', ' ')}}
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -43,11 +51,15 @@
                     <div class="card-body">
                         <h4 class="card-title">Volume</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->volume, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->volume * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->volume * $price->eur, 8, ',', ' ')}}">
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->volume, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->volume * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->volume * $price->eur, 8, ',', ' ')}}">
                                 Ƀ {{number_format($market->volume, 8, ',', ' ')}}
                             </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->volume, 8, ',', ' ')}}
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -59,11 +71,15 @@
                     <div class="card-body">
                         <h4 class="card-title">Low</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->low, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->low * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->low * $price->eur, 8, ',', ' ')}}">
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->low, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->low * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->low * $price->eur, 8, ',', ' ')}}">
                                 Ƀ {{number_format($market->low, 8, ',', ' ')}}
                             </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->low, 8, ',', ' ')}}
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -73,11 +89,15 @@
                     <div class="card-body">
                         <h4 class="card-title">Ask</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->ask, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->ask * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->ask * $price->eur, 8, ',', ' ')}}">
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->ask, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->ask * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->ask * $price->eur, 8, ',', ' ')}}">
                                 Ƀ {{number_format($market->ask, 8, ',', ' ')}}
                             </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->ask, 8, ',', ' ')}}
+                            @endif
                         </p>
                     </div>
                 </div>
@@ -87,11 +107,15 @@
                     <div class="card-body">
                         <h4 class="card-title">Last</h4>
                         <p class="card-text">
-                            <span data-bitcoin="Ƀ {{number_format($market->last, 8, ',', ' ')}}"
-                                  data-usd="$ {{number_format($market->last * $price->usd, 8, ',', ' ')}}"
-                                  data-eur="€ {{number_format($market->last * $price->eur, 8, ',', ' ')}}">
+                            @if($market->isFromBitcoin($market->currency_from->code))
+                                <span data-bitcoin="Ƀ {{number_format($market->last, 8, ',', ' ')}}"
+                                      data-usd="$ {{number_format($market->last * $price->usd, 8, ',', ' ')}}"
+                                      data-eur="€ {{number_format($market->last * $price->eur, 8, ',', ' ')}}">
                                 Ƀ {{number_format($market->bid, 8, ',', ' ')}}
                             </span>
+                            @else
+                                {{$market->currency_from->symbol}} {{number_format($market->bid, 8, ',', ' ')}}
+                            @endif
                             <span class="float-right badge @if($market->change>0) badge-success @else badge-danger @endif">
                                 % {{number_format($market->change, 2, ',', ' ')}}
                             </span>
@@ -155,19 +179,27 @@
                     <td>{{$order->created_at}}</td>
                     <td>{{number_format($order->quantity, 8, ',', ' ')}}</td>
                     <td>
-                        <span data-bitcoin="Ƀ {{number_format($order->last, 8, ',', ' ')}}"
-                              data-usd="$ {{number_format($order->last * $order->price->usd, 8, ',', ' ')}}"
-                              data-eur="€ {{number_format($order->last * $order->price->eur, 8, ',', ' ')}}">
+                        @if($market->isFromBitcoin($market->currency_from->code))
+                            <span data-bitcoin="Ƀ {{number_format($order->last, 8, ',', ' ')}}"
+                                  data-usd="$ {{number_format($order->last * $order->price->usd, 8, ',', ' ')}}"
+                                  data-eur="€ {{number_format($order->last * $order->price->eur, 8, ',', ' ')}}">
                             Ƀ {{number_format($order->last, 8, ',', ' ')}}
                         </span>
+                        @else
+                            {{$market->currency_from->symbol}} {{number_format($order->last, 8, ',', ' ')}}
+                        @endif
                     </td>
                     <td>{{number_format($order->last * $order->quantity, 8, ',', ' ')}}</td>
                     <td>
-                        <span data-bitcoin="Ƀ {{number_format(($market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}"
-                              data-usd="$ {{number_format((($market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->usd, 8, ',', ' ')}}"
-                              data-eur="€ {{number_format((($market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->eur, 8, ',', ' ')}}">
+                        @if($market->isFromBitcoin($market->currency_from->code))
+                            <span data-bitcoin="Ƀ {{number_format(($market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}"
+                                  data-usd="$ {{number_format((($market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->usd, 8, ',', ' ')}}"
+                                  data-eur="€ {{number_format((($market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->eur, 8, ',', ' ')}}">
                             Ƀ {{number_format(($market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}
                         </span>
+                        @else
+                            {{$market->currency_from->symbol}} {{number_format(($market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('profil.markets.orders.delete', ['market' => $market->id, 'order' => $order->id]) }}"
@@ -215,12 +247,12 @@
             @forelse($histories['latest'] as $history)
                 <tr>
                     <td>{{$history->created_at}}</td>
-                    <td>Ƀ {{number_format($history->high, 8, ',', ' ')}}</td>
-                    <td>Ƀ {{number_format($history->low, 8, ',', ' ')}}</td>
-                    <td>Ƀ {{number_format($history->bid, 8, ',', ' ')}}</td>
-                    <td>Ƀ {{number_format($history->ask, 8, ',', ' ')}}</td>
-                    <td>Ƀ {{number_format($history->volume, 8, ',', ' ')}}</td>
-                    <td>Ƀ {{number_format($history->last, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->high, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->low, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->bid, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->ask, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->volume, 8, ',', ' ')}}</td>
+                    <td>{{$market->currency_from->symbol}} {{number_format($history->last, 8, ',', ' ')}}</td>
                     <td>
                         <span class="@if($history->change>0) text-success @else text-danger @endif">
                             % {{number_format($history->change, 2, ',', ' ')}}

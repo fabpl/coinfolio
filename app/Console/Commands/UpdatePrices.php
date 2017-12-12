@@ -39,6 +39,8 @@ class UpdatePrices extends Command
     public function handle()
     {
         $updater = new Coindesk();
-        $updater->updatePrices();
+        if (!$updater->updatePrices()) {
+            echo $updater->getApiError();
+        }
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Models\Exchenge;
+namespace App\Models\Exchange;
 
 use App\Models\Currency;
-use App\Models\Exchenge;
+use App\Models\Exchange;
 use App\Models\Market;
 use Illuminate\Support\Carbon;
 
@@ -33,7 +33,7 @@ class Kraken
      */
     public function updateMarket(Market $market)
     {
-        if ($summary = $this->getMarketSummary($market->currency_from->code . $market->currency_to->code)) {
+        if ($summary = $this->getMarketSummary($market->currency_to->code0 . $market->currency_from->code)) {
             // Need history ?
             if ($summary['c'][0] != $market->last) {
                 // History
@@ -68,10 +68,28 @@ class Kraken
                     $currency = new Currency();
                     $currency->code = $_currency['altname'];
                     $currency->name = $_currency['altname'];
+                    switch ($_currency['altname']) {
+                        case 'BTC':
+                        case 'XBT':
+                            $currency->symbol = 'Ƀ';
+                            break;
+
+                        case 'EUR':
+                            $currency->symbol = '€';
+                            break;
+
+                        case 'USD':
+                            $currency->symbol = '$';
+                            break;
+                    }
                     $currency->save();
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -80,16 +98,16 @@ class Kraken
     public function updateMarkets()
     {
         if ($summaries = $this->getMarketSummaries()) {
-            if (!($exchenge = Exchenge::where('name', 'Kraken')->first())) {
-                $exchenge = new Exchenge();
-                $exchenge->name = 'Kraken';
-                $exchenge->save();
+            if (!($exchange = Exchange::where('name', 'Kraken')->first())) {
+                $exchange = new Exchange();
+                $exchange->name = 'Kraken';
+                $exchange->save();
             }
 
             foreach ($summaries as $_code => $summary) {
-                if (!($market = Market::where('exchenge_id', $exchenge->id)->where('code', $_code)->first())) {
-                    $currencyCodeFrom = substr($summary['base'], -3);
-                    $currencyCodeTo = substr(str_replace($summary['base'], '', $summary['altname']), -3);
+                if (!($market = Market::where('exchange_id', $exchange->id)->where('code', $_code)->first())) {
+                    $currencyCodeFrom = substr(str_replace($summary['base'], '', $summary['altname']), -3);
+                    $currencyCodeTo = substr($summary['base'], -3);
 
                     if (!($currencyFrom = Currency::where('code', $currencyCodeFrom)->first())) {
                         continue;
@@ -98,9 +116,9 @@ class Kraken
                         continue;
                     }
 
-                    if ($summary = $this->getMarketSummary($currencyCodeFrom . $currencyCodeTo)) {
+                    if ($summary = $this->getMarketSummary($currencyCodeTo . $currencyCodeFrom)) {
                         $market = new Market();
-                        $market->exchenge_id = $exchenge->id;
+                        $market->exchange_id = $exchange->id;
                         $market->currency_id_from = $currencyFrom->id;
                         $market->currency_id_to = $currencyTo->id;
                         $market->high = $summary['h'][1];
@@ -115,7 +133,11 @@ class Kraken
                     }
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**
