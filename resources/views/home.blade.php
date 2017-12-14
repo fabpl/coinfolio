@@ -27,6 +27,8 @@
     </div>
 
     <div class="container">
+        <h3>Followings</h3>
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -80,6 +82,72 @@
             @empty
                 <tr>
                     <td colspan="5">No markets</td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    <div class="container">
+        <h3>Orders</h3>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td>Date</td>
+                <td>Quantity</td>
+                <td>Last</td>
+                <td>Total</td>
+                <td>Benefit</td>
+                <td></td>
+            </tr>
+            </thead>
+            <tbody>
+            @forelse($orders as $order)
+                <tr>
+                    <td>{{$order->created_at}}</td>
+                    <td>{{number_format($order->quantity, 8, ',', ' ')}}</td>
+                    <td>
+                        @if($order->market->isFromBitcoin($order->market->currency_from->code))
+                            <span data-bitcoin="Ƀ {{number_format($order->last, 8, ',', ' ')}}"
+                                  data-usd="$ {{number_format($order->last * $order->price->usd, 8, ',', ' ')}}"
+                                  data-eur="€ {{number_format($order->last * $order->price->eur, 8, ',', ' ')}}">
+                            Ƀ {{number_format($order->last, 8, ',', ' ')}}
+                        </span>
+                        @else
+                            {{$order->market->currency_from->symbol}} {{number_format($order->last, 8, ',', ' ')}}
+                        @endif
+                    </td>
+                    <td>{{number_format($order->last * $order->quantity, 8, ',', ' ')}}</td>
+                    <td>
+                        @if($order->market->isFromBitcoin($order->market->currency_from->code))
+                            <span data-bitcoin="Ƀ {{number_format(($order->market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}"
+                                  data-usd="$ {{number_format((($order->market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->usd, 8, ',', ' ')}}"
+                                  data-eur="€ {{number_format((($order->market->last * $order->quantity) - ($order->last * $order->quantity)) * $order->price->eur, 8, ',', ' ')}}">
+                            Ƀ {{number_format(($order->market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}
+                        </span>
+                        @else
+                            {{$order->market->currency_from->symbol}} {{number_format(($order->market->last * $order->quantity) - ($order->last * $order->quantity), 8, ',', ' ')}}
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('profil.markets.orders.delete', ['market' => $order->market->id, 'order' => $order->id]) }}"
+                           onclick="event.preventDefault(); document.getElementById('form__delete_{{$order->id}}').submit();">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                        <form id="form__delete_{{$order->id}}"
+                              action="{{ route('profil.markets.orders.delete', ['market' => $order->market->id, 'order' => $order->id]) }}"
+                              method="POST"
+                              style="display: none;">
+                            <input type="hidden" name="order_id" value="{{$order->id}}">
+                            {{ method_field('DELETE') }}
+                            {{ csrf_field() }}
+                        </form>
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="5">No orders</td>
                 </tr>
             @endforelse
             </tbody>

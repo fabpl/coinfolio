@@ -29,7 +29,7 @@ class Price extends Model
      */
     public function synchronize()
     {
-        if ($this->updated_at->diffInMinutes(Carbon::now()) >= 60) {
+        if ($this->updated_at->diffInMinutes(Carbon::now()) >= 10) {
             $updater = new Coindesk();
             $this->fill($updater->updatePrice($this));
         }

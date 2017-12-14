@@ -18,6 +18,8 @@ And this extension
     
 ## Install
 
+Rename _database/sqlite/coinfolio.sqlite.example_ into _database/sqlite/coinfolio.sqlite_ and run this command :
+
     composer install
     php artisan migrate --seed
     php artisan price:update

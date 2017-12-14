@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Exchange\Bittrex;
 use App\Models\Price;
-use App\Models\Price\Coindesk;
 use App\Models\Market;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,6 +39,9 @@ class HomeController extends Controller
         // Markets
         $markets = Market::with(['exchange', 'currency_from', 'currency_to'])->get();
 
-        return view('home', compact('markets', 'followings', 'price'));
+        // Orders
+        $orders = $user->orders()->with(['market', 'price'])->get();
+
+        return view('home', compact('followings', 'markets', 'orders', 'price'));
     }
 }

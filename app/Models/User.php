@@ -43,4 +43,12 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\Market');
     }
+
+    /**
+     * The orders has the user.
+     */
+    public function orders()
+    {
+        return $this->hasMany('App\Models\Order');
+    }
 }

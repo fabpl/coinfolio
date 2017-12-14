@@ -56,7 +56,7 @@ class Market extends Model
      */
     public function synchronize()
     {
-        if ($this->updated_at->diffInMinutes(Carbon::now()) >= 60) {
+        if ($this->updated_at->diffInMinutes(Carbon::now()) >= 10) {
             $exchange = $this->exchange()->first();
 
             $class = 'App\Models\Exchange\\' . ucfirst($exchange->name);
